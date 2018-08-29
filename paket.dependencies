@@ -1,0 +1,7 @@
+framework: auto-detect
+source https://api.nuget.org/v3/index.json
+
+nuget FSharp.Core 4.5.2 redirects: on
+nuget System.ValueTuple
+nuget FSharp.Data ~> 3.0.0-beta4
+nuget SharpZipLib

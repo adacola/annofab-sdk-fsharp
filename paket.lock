@@ -1,0 +1,8 @@
+RESTRICTION: == netcoreapp2.1
+NUGET
+  remote: https://api.nuget.org/v3/index.json
+    FSharp.Core (4.5.2) - redirects: on
+    FSharp.Data (3.0.0-beta4)
+      FSharp.Core (>= 4.3.4)
+    SharpZipLib (1.0)
+    System.ValueTuple (4.5)

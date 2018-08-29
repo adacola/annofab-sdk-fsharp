@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2003
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{DF487CAF-47C2-4613-B18D-15F8ED6CCEF3}"
+	ProjectSection(SolutionItems) = preProject
+		paket.dependencies = paket.dependencies
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{149C1DD8-987D-4BDD-A750-B9561FC334F3}"
+EndProject
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "annofab-sdk-fsharp", "annofab-sdk-fsharp\annofab-sdk-fsharp.fsproj", "{4D4D334E-E041-4BBA-9C97-4936F5C17399}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4D4D334E-E041-4BBA-9C97-4936F5C17399}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D4D334E-E041-4BBA-9C97-4936F5C17399}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D4D334E-E041-4BBA-9C97-4936F5C17399}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D4D334E-E041-4BBA-9C97-4936F5C17399}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {550DF06C-FB72-4F34-BFF6-43C229AA7F52}
+	EndGlobalSection
+EndGlobal
