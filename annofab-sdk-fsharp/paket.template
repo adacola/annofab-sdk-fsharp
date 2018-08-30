@@ -1,0 +1,6 @@
+type file
+id Adacola.Annofab
+version 1.0.0
+authors adacola
+description
+  Annofab SDK for F#
