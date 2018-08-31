@@ -93,9 +93,10 @@ module Annofab =
             |> RefreshTokenResponse.Parse
         { IDToken = response.IdToken; AccessToken = response.AccessToken; RefreshToken = response.RefreshToken }
 
+    let private trialCount = 10
+    let private waitUnitMilliSecond = 1000
+
     let sendAndRefreshToken baseUri (sendApi : Token -> (HttpResponse * Token)) (parseResponse : HttpResponse -> 'a) token =
-        let trialCount = 6
-        let waitUnitMilliSecond = 100000
 
         let raiseError message (response : HttpResponse) =
             let errorMessage = 
