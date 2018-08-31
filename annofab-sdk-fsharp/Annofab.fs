@@ -102,7 +102,7 @@ module Annofab =
                 match response.Body with
                 | Text text -> sprintf "%s ステータスコード : %d, body : %s" message response.StatusCode text
                 | Binary _ -> sprintf "%s ステータスコード : %d" message response.StatusCode
-            printfn "%s" errorMessage
+            eprintfn "%s" errorMessage
             failwith errorMessage
 
         let rec loop token restTrialCount = 
@@ -113,7 +113,7 @@ module Annofab =
                 printfn "Unauthorized"
                 let errorResponse = text |> ErrorResponse.Parse
                 if errorResponse.Errors.Length = 1 && errorResponse.Errors.[0].ErrorCode = "EXPIRED_TOKEN" then
-                    printfn "トークン期限切れです。トークン再発行してから再度API実行します。残り試行回数 : %d" (restTrialCount - 1)
+                    eprintfn "トークン期限切れです。トークン再発行してから再度API実行します。残り試行回数 : %d" (restTrialCount - 1)
                     let newToken = refreshToken baseUri token
                     loop newToken (restTrialCount - 1)
                 else raiseError "API呼び出しに失敗しました。" response
@@ -125,17 +125,19 @@ module Annofab =
                 AlreadyUpdatedException(message, token) |> raise
             | (500 | 502 | 504), Text text ->
                 let errorResponse = text |> ErrorResponse.Parse
-                match restTrialCount, errorResponse.Errors with
+                match restTrialCount, errorResponse.Errors |> Array.toList with
                 | 0, _ -> raiseError "API呼び出しに失敗しました。" response
-                | _, [| error |] ->
+                | _, error::errors ->
                     match error.ErrorCode with
                     | "INTERNAL_SERVER_ERROR" | "TIMEOUT" ->
                         let waitMilliSecond = waitUnitMilliSecond * pown 2 (trialCount - restTrialCount)
-                        printfn "サーバ側エラーが発生しました。%d秒待った後リトライします。残り試行回数 : %d" (waitMilliSecond / 1000) (restTrialCount - 1)
+                        let cause = match error.ErrorCode with "TIMEOUT" -> "タイムアウト" | _ -> "エラー"
+                        eprintfn "サーバ側で%sが発生しました。%d秒待った後リトライします。残り試行回数 : %d" cause (waitMilliSecond / 1000) (restTrialCount - 1)
+                        error::errors |> List.iter (eprintfn "%O")
                         waitUnitMilliSecond * pown 2 (trialCount - restTrialCount) |> Async.Sleep |> Async.RunSynchronously
                         loop token (restTrialCount - 1)
                     | _ -> raiseError "API呼び出しに失敗しました。" response
-                | _ -> raiseError "API呼び出しに失敗しました。" response
+                | _, [] -> raiseError "API呼び出しに失敗しました。" response
             | _ -> raiseError "API呼び出しに失敗しました。" response
 
         loop token trialCount
