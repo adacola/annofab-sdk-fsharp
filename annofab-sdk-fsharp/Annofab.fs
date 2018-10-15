@@ -63,7 +63,7 @@ module Annofab =
     type PutAnnotationRequest = JsonProvider<"""{"project_id":"str","task_id":"str","input_data_id":"str","detail":[],"comment":"str","update_datetime":"str"}""">
     type PutAnnotationResponse = JsonProvider<"""{"project_id":"str","task_id":"str","input_data_id":"str","detail":[],"comment":"str","update_datetime":"str"}""">
     type GetMyAccountResponse = JsonProvider<"""{"account_id":"str","user_id":"str","username":"str","email":"str","reset_requested_email":"str","lang":"str","keylayout":"str","authority":"str","errors":"str","update_datetime":"str"}""">
-    type OperateTaskRequest = JsonProvider<"""{"status": "not_started","last_update_datetime":"str","account_id":"str"}""">
+    type OperateTaskRequest = JsonProvider<"""{"status": "not_started","last_updated_datetime":"str","account_id":"str"}""">
     type OperateTaskResponse = JsonProvider<"""{"project_id":"str","task_id":"str","phase":"annotation","status":"not_started","input_data_id_list":["str"],"account_id":"str","account_id_history":["str"],"work_timespan":1,"number_of_rejections":1,"start_datetime":"str","update_datetime":"str"}""">
     type AnnotationData = JsonProvider<"""{"project_id":"str","task_id":"str","input_data_id":"str","detail":[{"annotation_id":"str","user_id":"str","label_id":"str","label_name":{"messages":[{"lang":"ja-JP","message":"str"},{"lang":"en-US","message":"str"}],"default_lang":"ja-JP"},"data_holding_type":"inner","data":[],"additional_data_list":[],"comment":"str"}],"comment":"str","update_datetime":"date"}""">
 
