@@ -66,6 +66,7 @@ module Annofab =
     type OperateTaskRequest = JsonProvider<"""{"status": "not_started","last_updated_datetime":"str","account_id":"str"}""">
     type OperateTaskResponse = JsonProvider<"""{"project_id":"str","task_id":"str","phase":"annotation","status":"not_started","input_data_id_list":["str"],"account_id":"str","account_id_history":["str"],"work_timespan":1,"number_of_rejections":1,"start_datetime":"str","updated_datetime":"str"}""">
     type AnnotationData = JsonProvider<"""{"project_id":"str","task_id":"str","input_data_id":"str","detail":[{"annotation_id":"str","user_id":"str","label_id":"str","label_name":{"messages":[{"lang":"ja-JP","message":"str"},{"lang":"en-US","message":"str"}],"default_lang":"ja-JP"},"data_holding_type":"inner","data":[],"additional_data_list":[],"comment":"str"}],"comment":"str","updated_datetime":"date"}""">
+    type GetProjectResponse = JsonProvider<"""{"project_id":"str","organization_id":"str","title":"str","project_status":"str","input_data_type":"str","created_datetime":"str","updated_datetime":"str","configuration":{"project_rule":"str","project_workflow":"str","max_tasks_per_member":1,"max_tasks_per_member_including_hold":1,"input_data_max_long_side_length":1,"sampling_inspection_rate":0.1},"summary":{"last_tasks_updated_datetime":"date"}}""">
 
     let jsonHeaders = [HttpRequestHeaders.ContentType HttpContentTypes.Json]
 
@@ -320,6 +321,14 @@ module Annofab =
             annotations, token
         finally
             Directory.Delete(temporaryDir, false)
+
+    let getProject (baseUri : Uri) token projectID =
+        let apiUri = Uri(baseUri, sprintf "projects/%s" projectID)
+        let sendApi token =
+            let response = Http.Request(url = apiUri.AbsoluteUri, httpMethod = "GET", headers = getJsonAuthHeaders token, responseEncodingOverride = "UTF-8", silentHttpErrors = true)
+            response, token
+        let parseResponse = getTextResponse >> GetProjectResponse.Parse
+        sendAndRefreshToken baseUri sendApi parseResponse token
 
 open Annofab
 
