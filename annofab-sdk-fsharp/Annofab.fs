@@ -57,6 +57,7 @@ module Annofab =
     type PutTaskResponse = JsonProvider<"""{"project_id":"str","task_id":"str","phase":"annotation","status":"not_started","input_data_id_list": ["str"],"account_id":"str","account_id_history": ["str"],"work_timespan": 0,"start_datetime":"date","updated_datetime":"date"}""">
     type GetStatisticsTasksResponse = JsonProvider<"""[{"date":"date","tasks":[{"phase":"annotation","status":"not_started","count":1}]}]""">
     type GetStatisticsAccountsResponse = JsonProvider<"""[{"account_id":"string","histories":[{"date":"date","task_completed":1,"task_rejected":1,"worktime":"string"}]}]""">
+    type GetStatisticsWorktimesResponse = JsonProvider<"""[{"project_id":"str","date":"date","by_inputs":[{"phase":"str","histogram":[{"begin":1,"end":1,"count":11}],"average":"str","standard_deviation":"str"}],"by_tasks":[{"phase":"str","histogram":[{"begin":1,"end":1,"count":1}],"average":"str","standard_deviation":"str"}],"by_minutes":[],"accounts":[{"account_id":"str","by_inputs":[{"phase":"str","histogram":[{"begin":1,"end":1,"count":1}],"average":"str","standard_deviation":"str"}],"by_tasks":[{"phase":"str","histogram":[{"begin":1,"end":1,"count":1}],"average":"str","standard_deviation":"str"}],"by_minutes":[]}]}]""">
     type GetTasksResponse = JsonProvider<"""{"list":[{"project_id":"str","task_id":"str","phase":"str","status":"str","input_data_id_list":["str"],"account_id":"str","account_id_history":["str","str"],"work_timespan":"468872","start_datetime":"date","updated_datetime":"date"}],"page_no":1,"total_page_no":10}""">
     type TrainingData = JsonProvider<"""{"project_id":"str","task_id":"str","input_data_id":"str","detail":[{"annotation_id":"str","user_id":"str","label_id":"str","label_name":{"messages":[{"lang":"ja-JP","message":"str"},{"lang":"en-US","message":"str"}],"default_lang":"ja-JP"},"data_holding_type":"inner","data":[],"additional_data_list":[],"comment":"str"}],"comment":"str","updated_datetime":"date"}""">
     type GetAnnotationResponse = JsonProvider<"""{"project_id":"str","task_id":"str","input_data_id":"str","detail":[],"comment":"str","updated_datetime":"str"}""">
@@ -231,6 +232,14 @@ module Annofab =
             let response = Http.Request(url = apiUri.AbsoluteUri, httpMethod = "GET", headers = getJsonAuthHeaders token, responseEncodingOverride = "UTF-8", silentHttpErrors = true)
             response, token
         let parseResponse = getTextResponse >> GetStatisticsAccountsResponse.Parse
+        sendAndRefreshToken baseUri sendApi parseResponse token
+
+    let getStatisticsWorktimes (baseUri : Uri) token projectID =
+        let apiUri = Uri(baseUri, sprintf "projects/%s/statistics/worktimes" projectID)
+        let sendApi token =
+            let response = Http.Request(url = apiUri.AbsoluteUri, httpMethod = "GET", headers = getJsonAuthHeaders token, responseEncodingOverride = "UTF-8", silentHttpErrors = true)
+            response, token
+        let parseResponse = getTextResponse >> GetStatisticsWorktimesResponse.Parse
         sendAndRefreshToken baseUri sendApi parseResponse token
 
     let getArchiveFull (baseUri : Uri) token projectID =
